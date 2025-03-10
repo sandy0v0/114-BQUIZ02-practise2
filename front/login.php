@@ -14,7 +14,10 @@
             <input type="submit" value="登入">
             <input type="reset" value="清除">
             </td>
-            <td></td>
+            <td>
+                <a href="?do=forgot">忘記密碼</a>｜
+                <a href="?do=reg">尚未註冊</a>
+            </td>
         </tr>
     </table>
 
