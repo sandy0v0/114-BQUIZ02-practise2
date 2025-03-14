@@ -1,8 +1,6 @@
 <fieldset style="width: 75%;margin:auto">
     <legend>帳號管理</legend>
-
-
-<table>
+<table style="width: 75%;margin:auto">
     <tr>
         <td>帳號</td>
         <td>密碼</td>
@@ -12,15 +10,18 @@
     $rows=$User->all();
     foreach($rows as $row):?>
     <tr>
-        <td></td>
-        <td></td>
+        <td><?=$row['acc'];?></td>
+        <td><?=str_repeat("*",strlen($row['pw']));?></td>
         <td>
-            <input type="checkbox" name="del[]" id="" value="">
+            <input type="checkbox" name="del[]" id="" value="<?=$row['id'];?>">
         </td>
     </tr>
     <?php endforeach;?>
-
 </table>
+<div class="ct">
+    <button onclick='del()'>確定刪除</button>
+    <button onclick='resetChk()'>清空選取</button>
+</div>
 
 <h2>新增會員</h2>
 
@@ -64,6 +65,19 @@
 </fieldset>
 
 <script>
+
+function del(){
+    let dels=$("input[name='del[]']:checked");
+    let ids=new Array();
+    dels.each((idx,item)=>{
+        ids.push($(item).val())
+    })
+    $.post('./api/del_user.php',{ids},()=>{
+        location.reload();
+    })
+}
+
+
 function reg(){
     let user={
     acc:$("#acc").val(),
@@ -84,6 +98,7 @@ function reg(){
                 alert("帳號重複")
             }else{
                 $.post("./api/reg.php",user,(res)=>{
+                    location.reload();
                     // if(parseInt(res)==1){
                     //     alert("註冊完成，歡迎加入")
                     // }
@@ -100,6 +115,10 @@ function resetForm(){
     $("#pw2").val("")
     $("#email").val("")
 
+}
+
+function resetChk(){
+    $("input[type='checkbox']").prop("checked",false)
 }
 
 </script>
