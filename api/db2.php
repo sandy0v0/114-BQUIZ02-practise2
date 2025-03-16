@@ -64,23 +64,88 @@ class DB{
     }
 
 
-  function save($array){
-    if(isset($array['id'])){
-        $id=$array['id'];
-        unset($array['id']);
-        $set=$this->a2s($array);
-        $sql="UPDATE $this->table SET ".join(',',$set)." WHERE `id`='$id'";
+    function save($array){
+        if(isset($array['id'])){
+            $id=$array['id'];
+            unset($array['id']);
+            $set=$this->a2s($array);
+            $sql="UPDATE $this->table SET ".join(',',$set)." WHERE `id`='$id'";
 
-    }else{
-        $cols=array_keys($array);
-        $sql="INSERT INTO $this->table (`".join("`,`",$cols)."`) VALUES('".join("','",$array)."')";
+        }else{
+            $cols=array_keys($array);
+            $sql="INSERT INTO $this->table (`".join("`,`",$cols)."`) VALUES('".join("','",$array)."')";
+        }
+
+        return $this->pdo->exec($sql);
     }
 
-    return $this->pdo->exec($sql);
-  }
+    function a2s($array){
+        $tmp=[];
+        foreach($array as $key =>$value){
+            $tmp[]="`$key`='$value'";
+        }
+        return $tmp;
+    }
 
+    function max($col,$where=[]){
+        return $this->math('max',$col,$where);
+    }
 
+    function sum($col,$where=[]){
+        return $this->math('sum',$col,$where);
+    }
 
+    function min($col,$where=[]){
+        return $this->math('min',$col,$where);
+    }
+
+    function avg($col,$where=[]){
+        return $this->avg('avg',$col,$where);
+    }
+
+    function count($where=[]){
+        return $this->math('count','*',$where);
+    }
+
+    protected function fetchOne($sql){
+        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+    }
+
+    protected function fetchAll($sql){
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    protected function math($math,$col='id',$where=[]){
+        $sql="SELECT $math($col) FROM $this->table ";
+        if(!empty($where)){
+            $tmp=$this->a2s($where);
+            $sql=$sql ." WHERE ". join(" && ",$tmp);
+       }
+       return $this->pdo->query($sql)->fetchColumn();
+    }
 }
 
+    function q($sql){
+        $pdo=new PDO("mysql:host=localhost;charset=utf8;dbname=db14-2-p3",'root','');
+        return $pdo->query($sql)->fetchAll();
+    }
 
+    function dd($array){
+        echo "<pre>";
+        print_r($array);
+        echo "</pre>";
+    }
+
+    function to($url){
+        header("location:".$url);
+    }
+
+    
+    $Total=new DB('total');
+    $User=new DB('users');
+    $News=new DB('news');
+    $Que=new DB('que');
+    $Log=new DB('log');
+
+
+?>
