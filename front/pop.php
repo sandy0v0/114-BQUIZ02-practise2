@@ -44,7 +44,9 @@
                     <?=nl2br($row['news']);?>
                 </span>
             </td>
-            <td class="ct">
+            <td>
+                <?=$row['likes'];?>個人說
+                <img src="./icon/02B03.jpg" style="width: 25px;" alt="">
                 <?php
                     if(isset($_SESSION['user'])){
                         $chk=$Log->count(['news'=>$row['id'],'user'=>$_SESSION['user']]);
@@ -93,7 +95,8 @@
                 case "收回讚":
                     $(this).text("讚");
                 break;
-            }                
+            }  
+            location.reload();              
         })
     })
 
