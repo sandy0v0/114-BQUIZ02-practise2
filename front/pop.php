@@ -1,7 +1,15 @@
 <style>
 .detail{
-    display: none;
-
+    background:rgba(51,51,51,0.8); 
+    color:#FFF; 
+    height:400px; 
+    width:300px; 
+    position:absolute; 
+    display:none; 
+    z-index:9999; 
+    overflow:auto;
+    left: 10px;
+    top: 10px;
 }
 
 </style>
@@ -29,11 +37,14 @@
         ?>
         <tr>
             <td class="clo row-title"><?=$row['title'];?></td>
-            <td>
+            <td style="position: relative;" class="row-content">
                 <span class='title'><?=mb_substr($row['news'],0,25);?>...</span>
-                <span class='detail'><?=nl2br($row['news']);?></span>
+                <span class='detail'>
+                    <h2 style="color: skyblue;"><?=$News::$type[$row['type']];?></h2>
+                    <?=nl2br($row['news']);?>
+                </span>
             </td>
-            <td>
+            <td class="ct">
                 <?php
                     if(isset($_SESSION['user'])){
                         $chk=$Log->count(['news'=>$row['id'],'user'=>$_SESSION['user']]);
@@ -86,8 +97,24 @@
         })
     })
 
-    $(".row-title").on("click",function(){
-        $(this).next().children(".title,.detail").toggle(); 
-    })
+    $(".row-title").hover(
+        function(){
+            $(this).next().children('.detail').show();
+        },
+        function(){
+            $(this).next().children('.detail').hide();
+        },
+
+    )
+
+    $(".row-content").hover(
+        function(){
+            $(this).children('.detail').show();
+        },
+        function(){
+            $(this).children('.detail').hide();
+        },
+
+    )
 
 </script>
