@@ -1,3 +1,12 @@
+<style>
+.detail{
+    display: none;
+
+}
+
+</style>
+
+
 <fieldset>
 <legend>目前位置：首頁 > 人氣文章區</legend>
 
@@ -19,8 +28,11 @@
         
         ?>
         <tr>
-            <td class="clo"><?=$row['title'];?></td>
-            <td><?=mb_substr($row['news'],0,25);?>...</td>
+            <td class="clo row-title"><?=$row['title'];?></td>
+            <td>
+                <span class='title'><?=mb_substr($row['news'],0,25);?>...</span>
+                <span class='detail'><?=nl2br($row['news']);?></span>
+            </td>
             <td>
                 <?php
                     if(isset($_SESSION['user'])){
@@ -73,4 +85,9 @@
             }                
         })
     })
+
+    $(".row-title").on("click",function(){
+        $(this).next().children(".title,.detail").toggle(); 
+    })
+
 </script>
