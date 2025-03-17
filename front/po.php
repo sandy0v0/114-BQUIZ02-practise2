@@ -37,4 +37,8 @@ function getList(type){
     $("#postList").load("./api/get_list.php",{type})
 }
 
+function getPost(id){
+    $("#postList").load("./api/get_post.php",{id})
+}
+
 </script>
